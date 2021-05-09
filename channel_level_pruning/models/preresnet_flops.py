@@ -61,7 +61,6 @@ class Bottleneck(nn.Module):
 class resnet_flops(nn.Module):
     def __init__(self, depth=47, dataset='cifar10', cfg=None):
         super(resnet_flops, self).__init__()
-        assert (depth - 2) % 9 == 0, 'depth should be 9n+2'
 
         n = (depth - 2) // 9
         block = Bottleneck
