@@ -28,22 +28,34 @@ Mingxi Chen (mc7805) Xuefei Zhou (xz2643)
 cd code
 
 # To save trained original ResNet50
+# Download from https://drive.google.com/file/d/1QXfytkqN5rIkP0rprC5WeYDqO6xIHO3z/view?usp=sharing
 mkdir resnet
+mv [YOUR_DOWNLOAD_PATH]/model_best.pth.tar resnet/
 
 # To save trained original VGG19
+# Download from https://drive.google.com/file/d/1QRg4Ph3yP-POPRj-_LUgPDCFmJOL_7F5/view?usp=sharing
 mkdir vgg
+mv [YOUR_DOWNLOAD_PATH]/model_best.pth.tar vgg/
 
 # To save trained channel-level pruned ResNet50
+# Download from https://drive.google.com/file/d/1C7clSb779qpWcmGm56TQQ2AXNzDtmkLE/view?usp=sharing
 mkdir resnet_pruned
+mv [YOUR_DOWNLOAD_PATH]/model_best.pth.tar resnet_pruned/
 
 # To save trained channel-level pruned VGG19
+# Download from https://drive.google.com/file/d/1N-diRASGDNFJGi24P3klMQYgB4djAkB8/view?usp=sharing
 mkdir vgg_pruned
+mv [YOUR_DOWNLOAD_PATH]/model_best.pth.tar vgg_pruned/
 
 # To save trained filter-level pruned ResNet50
+# Download from https://drive.google.com/file/d/1dV2dbXDY8271CPf5gWRrwZ_otqbUkHys/view?usp=sharing
 mkdir resnet_trained_models
+mv [YOUR_DOWNLOAD_PATH]/check_point_retrain.pth resnet_trained_models/
 
 # To save trained filter-level pruned VGG19
+# Download from https://drive.google.com/file/d/14tAFzSgqWpQGMoc-9s2Scs-H4jlT2kYf/view?usp=sharing
 mkdir vgg_trained_models
+mv [YOUR_DOWNLOAD_PATH]/check_point.pth vgg_trained_models/
 
 ```
 
