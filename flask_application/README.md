@@ -6,8 +6,6 @@ Mingxi Chen (mc7805) Xuefei Zhou (xz2643)
 
 ## Folder Structure
 
-Please go to each folder and see README for more details
-
 ```
 ├── code
 │     |----- main.py # Handle HTTP requests
