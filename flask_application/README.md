@@ -11,7 +11,7 @@ Mingxi Chen (mc7805) Xuefei Zhou (xz2643)
 │     |----- main.py       # Handle HTTP requests
 │     |----- inference.py  # According to different request, choose corresponding model to predict user image 
 │     |----- templates
-                 |------- index.html
+│                |------- index.html
 │     |----- ...
 │   
 │── Dockerfile # Used to build image with cuda (DEFAULT OPTION)
