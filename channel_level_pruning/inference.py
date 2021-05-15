@@ -13,7 +13,6 @@ import models
 import time
 
 
-# Training settings
 parser = argparse.ArgumentParser(description='PyTorch Slimming CIFAR training')
 parser.add_argument('--dataset', type=str, default='cifar100',
                     help='training dataset (default: cifar100)')
@@ -79,7 +78,9 @@ else:
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
 
+# Load model weights
 checkpoint = torch.load(args.inference)
+# If try to inference a pruned model, configuration needs to be provided for modify original model
 if args.pr:
     model = models.__dict__[args.arch](dataset=args.dataset, depth=args.depth, cfg=[44, 56, 64, 100, 62, 61, 72, 51, 64, 182, 125, 128, 120, 121, 128, 138, 118, 127, 177, 126, 128, 418, 254, 256, 92, 191, 253, 226, 243, 256, 347, 250, 254, 545, 256, 254, 543, 254, 255, 20, 12, 175, 7, 3, 41, 4, 4, 77, 1405])
 else:
@@ -88,6 +89,7 @@ model.load_state_dict(checkpoint['state_dict'])
 model.cuda()
 
 
+# Use batch size = 1, measure feed-forward time for every test image and calculate mean and std inference time
 def inference():
     model.eval()
     test_loss = 0
@@ -115,6 +117,7 @@ def inference():
         ender.record()
         # WAIT FOR GPU SYNC
         torch.cuda.synchronize()
+        # Change from millisecond to second
         curr_time = starter.elapsed_time(ender)/1000
         timings[i] = curr_time
         i+=1

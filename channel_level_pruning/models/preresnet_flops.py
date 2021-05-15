@@ -8,9 +8,8 @@ from .channel_selection import channel_selection
 
 __all__ = ['resnet_flops']
 
-"""
-preactivation resnet with bottleneck design.
-"""
+# This is for using torchstat library to calculate ResNet Flops, since channel_selection is a self defined class
+# torchstat cannot automatically recognize this class. Therefore, move the steps in channel_selection directly into forward functions.
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -67,7 +66,6 @@ class resnet_flops(nn.Module):
 
         if cfg is None:
             # Construct config variable.
-            # cfg = [[16, 16, 16], [64, 16, 16]*(n-1), [64, 32, 32], [128, 32, 32]*(n-1), [128, 64, 64], [256, 64, 64]*(n-1), [256]]
             cfg = [[64, 64, 64], [256, 64, 64]*2, [256, 128, 128], [512, 128, 128]*3, [512, 256, 256], [1024, 256, 256]*5, [1024, 512, 512],[2048, 512, 512]*2, [2048]]
             cfg = [item for sub_list in cfg for item in sub_list]
 
@@ -117,9 +115,9 @@ class resnet_flops(nn.Module):
     def forward(self, x):
         x = self.conv1(x)
 
-        x = self.layer1(x)  # 32x32
-        x = self.layer2(x)  # 16x16
-        x = self.layer3(x)  # 8x8
+        x = self.layer1(x)  
+        x = self.layer2(x) 
+        x = self.layer3(x)
         x = self.layer4(x)
         x = self.bn(x)
         indexes = nn.Parameter(torch.ones(self.end))

@@ -15,7 +15,6 @@ import models
 import time
 
 
-# Training settings
 parser = argparse.ArgumentParser(description='PyTorch Slimming CIFAR training')
 parser.add_argument('--dataset', type=str, default='cifar100',
                     help='training dataset (default: cifar100)')
@@ -58,60 +57,8 @@ parser.add_argument('--depth', default=19, type=int,
 
 args = parser.parse_args()
 
-class channel_selection(nn.Module):
-    """
-    Select channels from the output of BatchNorm2d layer. It should be put directly after BatchNorm2d layer.
-    The output shape of this layer is determined by the number of 1 in `self.indexes`.
-    """
-    def __init__(self, num_channels):
-        """
-        Initialize the `indexes` with all one vector with the length same as the number of channels.
-        During pruning, the places in `indexes` which correpond to the channels to be pruned will be set to 0.
-        """
-        super(channel_selection, self).__init__()
-        self.indexes = nn.Parameter(torch.ones(num_channels))
-
-    def forward(self, input_tensor):
-        """
-        Parameter
-        ---------
-        input_tensor: (N,C,H,W). It should be the output of BatchNorm2d layer.
-        """
-        selected_index = np.squeeze(np.argwhere(self.indexes.data.cpu().numpy()))
-        if selected_index.size == 1:
-            selected_index = np.resize(selected_index, (1,)) 
-        output = input_tensor[:, selected_index, :, :]
-        return output
-    # your definition
-def count_your_model(m, x, y):
-     m.total_ops += torch.DoubleTensor([0])
-    # your rule here
-
-# args.cuda = not args.no_cuda and torch.cuda.is_available()
-
-# torch.manual_seed(args.seed)
-# if args.cuda:
-#     torch.cuda.manual_seed(args.seed)
-
-
-# kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
-# if args.dataset == 'cifar10':
-#     test_loader = torch.utils.data.DataLoader(
-#         datasets.CIFAR10('./data.cifar10', train=False, transform=transforms.Compose([
-#                            transforms.ToTensor(),
-#                            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
-#                        ])),
-#         batch_size=args.test_batch_size, shuffle=True, **kwargs)
-# else:
-#     test_loader = torch.utils.data.DataLoader(
-#         datasets.CIFAR100('./data.cifar100', train=False, transform=transforms.Compose([
-#                            transforms.ToTensor(),
-#                            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
-#                        ])),
-#         batch_size=args.test_batch_size, shuffle=True, **kwargs)
-
-
-# checkpoint = torch.load(args.inference)
+# Use torchstat library to calculate model FLOPs, if try to measure a pruned model,
+# configuration need to be provid to modify original structure
 if args.pr:
     model = models.__dict__[args.arch](dataset=args.dataset, depth=args.depth, 
      cfg=[50, 59, 64, 158, 64, 61, 116, 62, 64, 239, 128, 128, 369, 128, 128, 334, 128, 128, 330, 127, 128, 477, 256, 256, 500, 255, 256, 626, 256, 256, 653, 256, 256, 734, 256, 256, 717, 256, 256, 146, 184, 328, 28, 43, 82, 41, 52, 150, 1670])
@@ -119,8 +66,6 @@ else:
     model = models.__dict__[args.arch](dataset=args.dataset, depth=args.depth)
 print(model)
 
-#input = torch.randn(1, 3, 32, 32)
-#flops, params = profile(model, inputs=(input, ),custom_ops={channel_selection: count_your_model})
-#print(flops)
+
 stat(model,(3, 32, 32))
 
