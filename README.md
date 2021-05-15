@@ -22,6 +22,8 @@ Please go to each folder and see README for more details
 │             |----- ...      
 │ 
 ├── README.md
+│ 
+├── report.pdf
 ```
 ## Training/Pruning/Fine-tuning Platform
 NYU Greene
