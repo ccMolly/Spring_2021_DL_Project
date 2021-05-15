@@ -95,7 +95,6 @@ python3 main.py --refine vgg_pruned_60/pruned.pth.tar --dataset cifar10 --arch v
 python3 inference.py -pr --inference log_vgg_pruned_60/model_best.pth.tar --dataset cifar10 --arch vgg --depth 19 --test-batch-size 1
 
 python3 throughput.py -pr --inference log_vgg_pruned_60/model_best.pth.tar --dataset cifar10 --arch vgg --depth 19 --test-batch-size 10000
-Final Throughput: 34914.32681825829
 
 python3 flops.py -pr --arch vgg --depth 19
 
