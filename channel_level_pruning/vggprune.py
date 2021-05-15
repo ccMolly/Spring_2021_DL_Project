@@ -48,10 +48,12 @@ if args.model:
 
 print(model)
 total = 0
+# Calculate the number of weights(channels) of all BN layers
 for m in model.modules():
     if isinstance(m, nn.BatchNorm2d):
         total += m.weight.data.shape[0]
 
+# Copy weights of all BN layers for futher use
 bn = torch.zeros(total)
 index = 0
 for m in model.modules():
@@ -60,10 +62,16 @@ for m in model.modules():
         bn[index:(index+size)] = m.weight.data.abs().clone()
         index += size
 
+# Sort copied BN weights from small to large
 y, i = torch.sort(bn)
+# According to prune ratio, find threshold index and corresponding value
 thre_index = int(total * args.percent)
 thre = y[thre_index]
 
+# pruned is used to record how many channels have been pruned
+# cfg is used to record how many channels are left in the pruned model, cfg will be used to modify original model during fine-tuning
+# cfg_mask is used record channel indexes where their values are smaller than threshold of each layer, 
+# In every mask, False means the channel will be pruned and True means the channel will be reserved
 pruned = 0
 cfg = []
 cfg_mask = []
@@ -118,7 +126,7 @@ def test(model):
 
 acc = test(model)
 
-# Make real prune
+# Construct pruned model with random initialized weights according to cfg
 print(cfg)
 newmodel = vgg(dataset=args.dataset, cfg=cfg)
 if args.cuda:
@@ -131,6 +139,7 @@ with open(savepath, "w") as fp:
     fp.write("Number of parameters: \n"+str(num_parameters)+"\n")
     fp.write("Test accuracy: \n"+str(acc))
 
+# Start copying trained weights from original model to pruned model layer by layer
 layer_id_in_cfg = 0
 start_mask = torch.ones(3)
 end_mask = cfg_mask[layer_id_in_cfg]

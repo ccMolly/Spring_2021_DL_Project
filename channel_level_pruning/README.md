@@ -19,17 +19,17 @@ channel_level_pruning
 │   └────── preresnet_flops.py   
 │   └────── vgg.py    
 │     
-│── b.sh  
+│── b.sh              # Script for recording Memory and GPU utilization
 │     
-│── flops.py       
-│── inference.py      
-│── throughput.py 
+│── flops.py          # Calculate FLOPs of models    
+│── inference.py      # Calculate inferenc time of models 
+│── throughput.py     # Calculate throughput of models
 │     
-│── main.py      
+│── main.py           # Train models with/without sparsity
 │    
-│── resprune.py  
+│── resprune.py       # Prune ResNet
 │  
-└── vggprune.py
+└── vggprune.py       # Prune VGG
 ```
 ### Training/Pruning/Fine-tuning Platform
 NYU Greene
