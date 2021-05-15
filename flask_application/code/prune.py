@@ -6,21 +6,27 @@ from preresnet import resnet
 
 def prune_network(args, network=None):
     resnet_prune_layer = 1
-    device = torch.device("cuda" if args.gpu_no >= 0 else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    if args.vgg == 'resnet50' and network is None:
+    if args.net == 'resnet50' and network is None:
         network = resnet()
         if args.load_path:
-            check_point = torch.load(args.load_path)
+            if torch.cuda.is_available():
+                check_point = torch.load(args.load_path)
+            else:
+                check_point = torch.load(args.load_path, map_location=torch.device('cpu'))
             network.load_state_dict(check_point['state_dict'])
     elif network is None:
-        network = VGG(args.vgg, args.data_set)
+        network = VGG(args.net, args.data_set)
         if args.load_path:
-            check_point = torch.load(args.load_path)
+            if torch.cuda.is_available():
+                check_point = torch.load(args.load_path)
+            else:
+                check_point = torch.load(args.load_path, map_location=torch.device('cpu'))
             network.load_state_dict(check_point['state_dict'])
 
     # prune network
-    if args.vgg == 'resnet50':
+    if args.net == 'resnet50':
         if resnet_prune_layer == 1:
             network = prune_resnet_1(network, args.prune_layers, args.independent_prune_flag)
         if resnet_prune_layer == 2:
@@ -88,7 +94,7 @@ def prune_resnet_1(net, prune_layers, independent_prune_flag):
     arg_index = 1
     residue = None
     layers = [net.layer1, net.layer2, net.layer3, net.layer4]
-    prune_rate = [0.3,0.3,0.3,0.3]
+    prune_rate = [0.5,0.6,0.4,0.3]
 
     for layer_index in range(len(layers)):
         for block_index in range(len(layers[layer_index])):

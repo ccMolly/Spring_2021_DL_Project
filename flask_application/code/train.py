@@ -8,15 +8,15 @@ from loss import Loss_Calculator
 from evaluate import accuracy
 from utils import AverageMeter, get_data_set
 from optimizer import get_optimizer
-from preresnet_filter import resnet
+from preresnet import resnet
 
 def train_network(args, network=None, data_set=None):
     device = torch.device("cuda" if args.gpu_no >= 0 else "cpu")
 
-    if args.vgg == 'resnet50' and network is None:
+    if args.net == 'resnet50' and network is None:
         network = resnet()
     elif network is None:
-        network = VGG(args.vgg, args.data_set)
+        network = VGG(args.net, args.data_set)
     network = network.to(device)
 
     if data_set is None:

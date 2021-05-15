@@ -7,7 +7,7 @@ import numpy as np
 
 
 def summary(model, input_size, batch_size=-1, device=torch.device('cuda:0'), dtypes=None):
-    device = torch.device("cpu")
+    #device = torch.device("cpu")
     result, params_info = summary_string(
         model, input_size, batch_size, device, dtypes)
     print(result)
@@ -16,7 +16,7 @@ def summary(model, input_size, batch_size=-1, device=torch.device('cuda:0'), dty
 
 
 def summary_string(model, input_size, batch_size=-1, device=torch.device('cuda:0'), dtypes=None):
-    device = torch.device("cpu")
+    #device = torch.device("cpu")
     if dtypes == None:
         dtypes = [torch.FloatTensor]*len(input_size)
 
