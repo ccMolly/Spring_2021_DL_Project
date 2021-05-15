@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM nvidia/cuda:9.2-base-ubuntu18.04
 
 # Install some basic utilities
 RUN apt-get update && apt-get install -y \
@@ -44,6 +44,10 @@ USER user
 ENV HOME=/home/user
 RUN chmod 777 /home/user
 
+ENV FLASK_APP=main.py
+ENV PORT 5000
+EXPOSE $PORT
+
 # Install Miniconda and Python 3.8
 ENV CONDA_AUTO_UPDATE_CONDA=false
 ENV PATH=/home/user/miniconda/bin:$PATH
@@ -54,18 +58,12 @@ RUN curl -sLo ~/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-py38
  && conda install -y python==3.8.1 \
  && conda clean -ya
 
-# No CUDA-specific steps
-ENV FLASK_APP=main.py
-ENV NO_CUDA=1
-ENV PORT 5000
-EXPOSE $PORT
-
+# CUDA 9.2-specific steps
 RUN conda install -y -c pytorch \
-    cpuonly \
-    "pytorch=1.5.0=py3.8_cpu_0" \
-    "torchvision=0.6.0=py38_cpu" \
+    cudatoolkit=9.2 \
+    "pytorch=1.5.0=py3.8_cuda9.2.148_cudnn7.6.3_0" \
+    "torchvision=0.6.0=py38_cu92" \
     "flask" \
  && conda clean -ya
 
-# Set the default command to python3
 CMD ["python3", "main.py"]
