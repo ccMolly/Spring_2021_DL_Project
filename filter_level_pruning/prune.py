@@ -8,19 +8,19 @@ def prune_network(args, network=None):
     resnet_prune_layer = 1
     device = torch.device("cuda" if args.gpu_no >= 0 else "cpu")
 
-    if args.vgg == 'resnet50' and network is None:
+    if args.net == 'resnet50' and network is None:
         network = resnet()
         if args.load_path:
             check_point = torch.load(args.load_path)
             network.load_state_dict(check_point['state_dict'])
     elif network is None:
-        network = VGG(args.vgg, args.data_set)
+        network = VGG(args.net, args.data_set)
         if args.load_path:
             check_point = torch.load(args.load_path)
             network.load_state_dict(check_point['state_dict'])
 
     # prune network
-    if args.vgg == 'resnet50':
+    if args.net == 'resnet50':
         if resnet_prune_layer == 1:
             network = prune_resnet_1(network, args.prune_layers, args.independent_prune_flag)
         if resnet_prune_layer == 2:
