@@ -8,8 +8,8 @@ Mingxi Chen (mc7805) Xuefei Zhou (xz2643)
 
 ```
 ├── code
-│     |----- main.py # Handle HTTP requests
-│     |----- inference.py # According to different request, choose corresponding model to predict user image 
+│     |----- main.py       # Handle HTTP requests
+│     |----- inference.py  # According to different request, choose corresponding model to predict user image 
 │     |----- templates
                  |------- index.html
 │     |----- ...
